@@ -23,4 +23,5 @@ More results coming for CIFAR10.
 
 ## Author
 Jerome Rony [@jeromerony](https://github.com/jeromerony)
-- this is an arrangment of the Jerome's work made by me for my thesis work
+
+- this is an arrangment of the Jerome's work and the others reported in this repo and in the ones ending in _mio. This is made by me for my thesis work.
