@@ -10,6 +10,7 @@ import torch
 from torchvision.utils import save_image
 import os
 import argparse
+from utils import *
 
 parser = argparse.ArgumentParser()
 
@@ -62,7 +63,8 @@ NUM_IMG = 2
 
 for i in range(NUM_IMG):
     #casual generation of latent vector
-    z = torch.randn(1, nch * 8, 1, 1, device=device)  
+    z = hypersphere(torch.randn(1, 4 * 32, 1, 1, device=device))  #also with hypersphere, the bitwise accuracy is not high
+    #z = torch.randn(1, nch * 8, 1, 1, device=device) 
     
     with torch.no_grad():  
         image = G(z, G.max_res)

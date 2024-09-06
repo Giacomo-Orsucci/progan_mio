@@ -47,7 +47,7 @@ opt = parser.parse_args()
 print(opt)
 
 DEVICE = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
-MAX_RES = 3 # for 32x32 output
+MAX_RES = 5 # for 128x128 output
 
 transform = transforms.Compose([
     # resize to 32x32
@@ -56,7 +56,8 @@ transform = transforms.Compose([
     transforms.Normalize((0.5,), (0.5,))
 ])
 
-dataset = MNIST(opt.data, download=True, train=True, transform=transform)
+#dataset = MNIST(opt.data, download=True, train=True, transform=transform)
+dataset = opt.data
 
 # creating output folders
 if not os.path.exists(opt.outd):
