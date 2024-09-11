@@ -43,10 +43,8 @@ FINGERPRINT_SIZE = len(fingerprint)
 
 
 nch = 16
-G = Generator(nch=nch, ws=True, pn=True).to(device)
-
-
-G = torch.load('/home/giacomo/Desktop/progan_pretrained_celeba.pth')
+G = Generator().to(device)
+G = torch.load('/media/giacomo/hdd_ubuntu/Progan_pretrained_celeba/ProGAN_150k_CelebA_128x128_generator.pth')
 
 G.eval()
 
@@ -55,20 +53,24 @@ RevealNet = StegaStampDecoder( #decoder and parameters passing
     )
 RevealNet.load_state_dict(torch.load(args.decoder_path))
 RevealNet = RevealNet.to(device)
+RevealNet.eval()
 bitwise_accuracy = 0
 
-NUM_IMG = 2
-
+NUM_IMG = 10
 
 
 for i in range(NUM_IMG):
     #casual generation of latent vector
-    z = hypersphere(torch.randn(1, 4 * 32, 1, 1, device=device))  #also with hypersphere, the bitwise accuracy is not high
-    #z = torch.randn(1, nch * 8, 1, 1, device=device) 
+
+    #z = hypersphere(torch.randn(1, 4 * 32, 1, 1, device=device))  #also with hypersphere, the bitwise accuracy is not high
+   
+    z = torch.randn(1, 128, 1, 1, device=device) # (Batch size, Channels, Height, Width)
     
-    with torch.no_grad():  
-        image = G(z, G.max_res)
+     
+    image = G(z, G.max_res) #latent vector, 4*2^5 = 128 (max_res)
     save_image(image, os.path.join('/home/giacomo/Desktop/prova', f'image_{i}.png'), padding=0)
+
+    print(image)
 
     detected_fingerprints = RevealNet(image)
 
@@ -84,9 +86,10 @@ for i in range(NUM_IMG):
     print(detected_fingerprints)
     
     bitwise_accuracy += (detected_fingerprints == fingerprint).float().mean(dim=1).sum().item()
+
     
 
-bitwise_accuracy = bitwise_accuracy / NUM_IMG #calcola l'accuratezza generale
+bitwise_accuracy = bitwise_accuracy / (NUM_IMG) #calcola l'accuratezza generale
 
 print(f"Bitwise accuracy on fingerprinted images: {bitwise_accuracy}")
     
