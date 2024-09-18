@@ -56,19 +56,17 @@ RevealNet = RevealNet.to(device)
 RevealNet.eval()
 bitwise_accuracy = 0
 
-NUM_IMG = 10
+NUM_IMG = 50000
 
 
 for i in range(NUM_IMG):
+    
     #casual generation of latent vector
-
-    #z = hypersphere(torch.randn(1, 4 * 32, 1, 1, device=device))  #also with hypersphere, the bitwise accuracy is not high
-   
     z = torch.randn(1, 128, 1, 1, device=device) # (Batch size, Channels, Height, Width)
     
-     
+    print(i) 
     image = G(z, G.max_res) #latent vector, 4*2^5 = 128 (max_res)
-    save_image(image, os.path.join('/home/giacomo/Desktop/prova', f'image_{i}.png'), padding=0)
+    save_image(image, os.path.join('/media/giacomo/hdd_ubuntu/progan_gen_50k', f'image_{i}.png'), padding=0)
 
     print(image)
 
@@ -89,7 +87,7 @@ for i in range(NUM_IMG):
 
     
 
-bitwise_accuracy = bitwise_accuracy / (NUM_IMG) #calcola l'accuratezza generale
+bitwise_accuracy = bitwise_accuracy / (NUM_IMG) #compute the general accuracy
 
 print(f"Bitwise accuracy on fingerprinted images: {bitwise_accuracy}")
     
